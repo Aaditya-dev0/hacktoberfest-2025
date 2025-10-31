@@ -1,25 +1,56 @@
-# Q5: Number of Islands
+#include <iostream>
+#include <vector>
+using namespace std;
 
-Given a 2D grid map of `'1'`s (land) and `'0'`s (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+class Solution {
+public:
+    void dfs(vector<vector<char>>& grid, int i, int j) {
+        int rows = grid.size();
+        int cols = grid[0].size();
 
-**Example 1:**
+        // Boundary and water check
+        if (i < 0 || j < 0 || i >= rows || j >= cols || grid[i][j] == '0')
+            return;
 
-**Input:**
-```
-11110
-11010
-11000
-00000
-```
-**Output:** 1
+        grid[i][j] = '0'; // Mark as visited
 
-**Example 2:**
+        // Explore all 4 directions
+        dfs(grid, i + 1, j); // down
+        dfs(grid, i - 1, j); // up
+        dfs(grid, i, j + 1); // right
+        dfs(grid, i, j - 1); // left
+    }
 
-**Input:**
-```
-11000
-11000
-00100
-00011
-```
-**Output:** 3
+    int numIslands(vector<vector<char>>& grid) {
+        if (grid.empty()) return 0;
+
+        int count = 0;
+        int rows = grid.size();
+        int cols = grid[0].size();
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                if (grid[i][j] == '1') {
+                    ++count;
+                    dfs(grid, i, j);
+                }
+            }
+        }
+
+        return count;
+    }
+};
+
+int main() {
+    vector<vector<char>> grid = {
+        {'1','1','0','0','0'},
+        {'1','1','0','0','0'},
+        {'0','0','1','0','0'},
+        {'0','0','0','1','1'}
+    };
+
+    Solution sol;
+    cout << "Number of islands: " << sol.numIslands(grid) << endl;
+
+    return 0;
+}
