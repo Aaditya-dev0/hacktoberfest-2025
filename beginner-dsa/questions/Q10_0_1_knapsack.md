@@ -1,14 +1,56 @@
-# Q10: 0/1 Knapsack
+#include <iostream>
+#include <vector>
+using namespace std;
 
-Given weights and values of `n` items, put these items in a knapsack of capacity `W` to get the maximum total value in the knapsack.
+class Solution {
+public:
+    void dfs(vector<vector<char>>& grid, int i, int j) {
+        int rows = grid.size();
+        int cols = grid[0].size();
 
-In other words, given two integer arrays `val[0..n-1]` and `wt[0..n-1]` which represent values and weights associated with `n` items respectively. Also given an integer `W` which represents knapsack capacity, find out the maximum value subset of `val[]` such that sum of the weights of this subset is smaller than or equal to `W`. You cannot break an item, either pick the complete item or don’t pick it (0-1 property).
+        // Boundary and water check
+        if (i < 0 || j < 0 || i >= rows || j >= cols || grid[i][j] == '0')
+            return;
 
-**Example:**
+        grid[i][j] = '0'; // Mark as visited
 
-**Input:**
-val = [60, 100, 120]
-wt = [10, 20, 30]
-W = 50
+        // Explore all 4 directions
+        dfs(grid, i + 1, j); // down
+        dfs(grid, i - 1, j); // up
+        dfs(grid, i, j + 1); // right
+        dfs(grid, i, j - 1); // left
+    }
 
-**Output:** 220
+    int numIslands(vector<vector<char>>& grid) {
+        if (grid.empty()) return 0;
+
+        int count = 0;
+        int rows = grid.size();
+        int cols = grid[0].size();
+
+        for (int i = 0; i < rows; ++i) {
+            for (int j = 0; j < cols; ++j) {
+                if (grid[i][j] == '1') {
+                    ++count;
+                    dfs(grid, i, j);
+                }
+            }
+        }
+
+        return count;
+    }
+};
+
+int main() {
+    vector<vector<char>> grid = {
+        {'1','1','0','0','0'},
+        {'1','1','0','0','0'},
+        {'0','0','1','0','0'},
+        {'0','0','0','1','1'}
+    };
+
+    Solution sol;
+    cout << "Number of islands: " << sol.numIslands(grid) << endl;
+
+    return 0;
+}
